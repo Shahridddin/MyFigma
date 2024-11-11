@@ -8,6 +8,7 @@ public class MyAppFigmaApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MyAppFigmaApplication.class, args);
+
     }
 
 }
