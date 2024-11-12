@@ -1,5 +1,7 @@
 package uz.pdp.myappfigma.service;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,11 +12,14 @@ import uz.pdp.myappfigma.dto.auth.AuthUserCreateDto;
 import uz.pdp.myappfigma.dto.auth.GenerateTokenRequest;
 import uz.pdp.myappfigma.dto.auth.RefreshTokenRequest;
 import uz.pdp.myappfigma.dto.auth.TokenResponse;
+import uz.pdp.myappfigma.properties.JwtProperties;
 import uz.pdp.myappfigma.repository.UserCreatRepository;
 import uz.pdp.myappfigma.dto.auth.UserSessionData;
 import uz.pdp.myappfigma.entity.AuthUser;
 import uz.pdp.myappfigma.enums.JwtTokenType;
 
+import java.security.Key;
+import java.util.Date;
 import java.util.Map;
 
 @Service
@@ -25,13 +30,17 @@ public class UserCreateService implements AuthUserService {
     private final UserSession userSession;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final JwtProperties jwtProperties;
+    private final Key signingKey;
 
-    public UserCreateService(UserCreatRepository userCreatRepository, PasswordEncoder bcryptPasswordEncoder, UserSession userSession, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+    public UserCreateService(UserCreatRepository userCreatRepository, PasswordEncoder bcryptPasswordEncoder, UserSession userSession, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtProperties jwtProperties, Key signingKey) {
         this.userCreatRepository = userCreatRepository;
         this.bcryptPasswordEncoder = bcryptPasswordEncoder;
         this.userSession = userSession;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtProperties = jwtProperties;
+        this.signingKey = signingKey;
     }
 
 
@@ -61,16 +70,16 @@ public class UserCreateService implements AuthUserService {
     }
 
 
-//    public String generateRefreshToken(String username, Map<String, Object> claims) {
-//        return Jwts.builder()
-//                .setSubject(username)
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setIssuer(jwtProperties.getIssuer())
-//                .setExpiration(jwtProperties.getRefreshTokenTtl())
-//                .signWith(signingKey, SignatureAlgorithm.HS256)
-//                .addClaims(claims)
-//                .compact();
-//    }
+    public String generateRefreshToken(String username, Map<String, Object> claims) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setIssuer(jwtProperties.getIssuer())
+                .setExpiration(jwtProperties.getRefreshTokenTtl())
+                .signWith(signingKey, SignatureAlgorithm.HS256)
+                .addClaims(claims)
+                .compact();
+    }
 
     @Override
     public TokenResponse refreshToken(RefreshTokenRequest dto) {

@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,6 +46,7 @@ public class AuthUser extends Auditable{
     @Enumerated(value = EnumType.STRING)
     private AuthRole role=AuthRole.USER;
 
-    private Boolean isActive=true;
+    @Column(insertable = true)
+    private Boolean isActive;
 
 }

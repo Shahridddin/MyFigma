@@ -34,7 +34,6 @@ public class UserRegisterController {
 
 
     @GetMapping("/me")
-    @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse<UserSessionData> getMe(){
         UserSessionData userSessionData = userCreateService.getMe();
         return new BaseResponse<>(userSessionData);
