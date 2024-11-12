@@ -7,7 +7,5 @@ public record AuthUserCreateDto(
         String lastName,
         String email,
         String username,
-        String password,
-        AuthRole authRole,
-        boolean isActive) {
+        String password) {
 }

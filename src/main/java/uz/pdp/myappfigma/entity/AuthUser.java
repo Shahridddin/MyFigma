@@ -15,34 +15,36 @@ import lombok.Setter;
 import uz.pdp.myappfigma.enums.AuthRole;
 
 
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@AllArgsConstructor
 @Table(name = "auth_users")
-public class AuthUser {
+public class AuthUser extends Auditable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    @Column(unique = true, nullable = false)
+    @Column(unique = true,nullable = false)
     private String email;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true,nullable = false)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private AuthRole authRole;
+    @Column(nullable = false)
+    private String firsName;
 
-    private boolean isActive;
+    @Column(nullable = false)
+    private String lastName;
+
+    @Enumerated(value = EnumType.STRING)
+    private AuthRole role=AuthRole.USER;
+
+    private Boolean isActive=true;
+
 }
