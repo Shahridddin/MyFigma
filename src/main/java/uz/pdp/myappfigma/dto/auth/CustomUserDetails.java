@@ -19,10 +19,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (authUser.getAuthRole() == null) {
+        if (authUser.getRole() == null) {
             return Collections.emptyList();
         }
-        return List.of(new SimpleGrantedAuthority("ROLE_" + authUser.getAuthRole()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + authUser.getRole()));
     }
 
     public String getEmail() {
@@ -60,6 +60,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return authUser.isActive();
+        return authUser.getIsActive();
     }
 }

@@ -1,9 +1,7 @@
 package uz.pdp.myappfigma.controller;
 
-
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,15 +13,14 @@ import uz.pdp.myappfigma.dto.auth.GenerateTokenRequest;
 import uz.pdp.myappfigma.dto.auth.RefreshTokenRequest;
 import uz.pdp.myappfigma.dto.auth.TokenResponse;
 import uz.pdp.myappfigma.dto.auth.UserSessionData;
-import uz.pdp.myappfigma.dto.auth.AuthUserCreateDto;
 import uz.pdp.myappfigma.service.AuthUserService;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthUserController {
+public class UserLoginController {
     private final AuthUserService authUserService;
 
-    public AuthUserController(AuthUserService authUserService) {
+    public UserLoginController(AuthUserService authUserService) {
         this.authUserService = authUserService;
     }
 
@@ -39,18 +36,10 @@ public class AuthUserController {
         return new BaseResponse<>(response);
     }
 
-    @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse<Long> create(@Valid @RequestBody AuthUserCreateDto dto) {
-        Long id = authUserService.createUser(dto);
-        return new BaseResponse<>(id);
-    }
-
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse<UserSessionData> getMe() {
         var userSessionData = authUserService.getMe();
         return new BaseResponse<>(userSessionData);
     }
-
 }
